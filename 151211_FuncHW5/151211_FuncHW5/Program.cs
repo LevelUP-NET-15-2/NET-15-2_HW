@@ -8,6 +8,10 @@ namespace _151211_FuncHW5
         {
             int choice;
 
+            Console.WriteLine("               )\\._.,--....,'``.      ");
+            Console.WriteLine(" .b--.        /;   _.. \\   _\\  (`._ ,.");
+            Console.WriteLine("`=,-,-'~~~   `----(,_..'--(,_..'`-.;.'");
+            Console.WriteLine();
             Console.WriteLine("Aloha! Это таки пятая домашняя работа Бигдана Ростислава!");
             Console.WriteLine("Пришла пора сделать выбор: ");
             Console.WriteLine("1) Если вы таки хотите работать с фигурами введите 1");

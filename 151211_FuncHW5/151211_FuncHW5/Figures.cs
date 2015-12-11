@@ -74,7 +74,13 @@ namespace _151211_FuncHW5
                 return string.Format("{0} \nin \n{1}", tri, circ);
             }
         }
-
+        /// <summary>
+        /// This function makes all calculations and takes the values of points
+        /// </summary>
+        /// <param name="a">First point</param>
+        /// <param name="b">Second point</param>
+        /// <param name="c">Third point</param>
+        /// <param name="tic">The structure that defines the Triangle in Circle</param>
         public Figures(Point a, Point b, Point c, out Triangle_in_Circle tic)
         {
             Circle c1 = new Circle();
