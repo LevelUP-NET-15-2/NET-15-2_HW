@@ -103,6 +103,7 @@ namespace _151211_FuncHW5
                 {
                     char[] delimiterChars = { ' ', ',', '.' };
 
+                    Console.Clear();
                     Console.WriteLine("В какие дни у вас есть занятия?");
                     string days_source = Console.ReadLine();
                     string days = days_source.ToUpper();
