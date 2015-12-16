@@ -36,6 +36,7 @@ namespace _151216_MassSort
                 exchanged = false;
                 for (int i = 0; i < Arr.Length - 1; i++)
                 {
+
                     if (Arr[i] >= 0 && Arr[i + 1] < 0)
                     {
                         tmp = Arr[i];
@@ -136,6 +137,7 @@ namespace _151216_MassSort
             {
                 Console.WriteLine("Вы ввели что-то не то. Пожалуйста вводите только 1 или 2");
                 Console.ReadKey();
+                return;
             }
         }
     }
