@@ -102,6 +102,7 @@ namespace _151216_MinMaxArrayElem
 
         #endregion
 
+
         #region --- === ###   Основная часть   ### === ---
 
         static void Main(string[] args)
@@ -276,11 +277,11 @@ namespace _151216_MinMaxArrayElem
                 Console.WriteLine("Минимальный элемент: {0} [{1}, {2}]", min, mini + 1, minj + 1);
                 Console.WriteLine("Максимальный элемент: {0} [{1}, {2}]", max, maxi + 1, maxj + 1);
             }
-            else
-            {
-                Console.WriteLine("Вы ввели что-то не то.");
-                return;
-            }
+            //else
+            //{
+            //    Console.WriteLine("Вы ввели что-то не то.");
+            //    return;
+            //}
 
             Console.ReadKey();
 
