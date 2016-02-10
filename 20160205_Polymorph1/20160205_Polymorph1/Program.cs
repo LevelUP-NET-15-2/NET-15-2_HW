@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _20160205_Polymorph1
+﻿namespace _20160205_Polymorph1
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int worknum = 0;
-            int managnum = 0;
-            int presnum = 0;
+            uint worknum = 0;
+            uint managnum = 0;
+            uint presnum = 0;
 
             DataEnter.EnterNumberOfEmployers(out worknum, out managnum, out presnum);
 
-            Worker[] workers = DataEnter.EnterWorkersData(worknum);
+            Employer[] employers = new Employer[worknum + managnum + presnum];
 
-            for (int i = 0; i < workers.Length; i++)
+            for (int i = 0; i < worknum; i++)
             {
-                workers[i].Print();
+                employers[i] = DataEnter.EnterWorkerData();
+            }
+
+            for (int i = (int)worknum; i < (int)managnum + (int)worknum; i++)
+            {
+                employers[i] = DataEnter.EnterManagerData();
+            }
+
+            for (int i = (int)worknum + (int)managnum; i < presnum + worknum + managnum; i++)
+            {
+                employers[i] = DataEnter.EnterPresidentData();
+            }
+
+            for (int i = 0; i < employers.Length; i++)
+            {
+                employers[i].Print();
             }  
         }
     }

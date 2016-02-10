@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _20160205_Polymorph1
 {
     public class DataEnter
     {
-        public static void EnterNumberOfEmployers(out int worknum, out int managnum, out int presnum)
+        public static void EnterNumberOfEmployers(out uint worknum, out uint managnum, out uint presnum)
         {
             Console.WriteLine("Введите количество простых работников: ");
-            bool isInt = Int32.TryParse(Console.ReadLine(), out worknum);
+            bool isInt = UInt32.TryParse(Console.ReadLine(), out worknum);
 
             while (!isInt)
             {
@@ -21,11 +17,11 @@ namespace _20160205_Polymorph1
                 Console.Clear();
 
                 Console.WriteLine("Введите количество простых работников: ");
-                isInt = Int32.TryParse(Console.ReadLine(), out worknum);
+                isInt = UInt32.TryParse(Console.ReadLine(), out worknum);
             }
 
             Console.WriteLine("Введите количество менеджеров: ");
-            bool isInt1 = Int32.TryParse(Console.ReadLine(), out managnum);
+            bool isInt1 = UInt32.TryParse(Console.ReadLine(), out managnum);
 
             while (!isInt1)
             {
@@ -35,11 +31,11 @@ namespace _20160205_Polymorph1
                 Console.Clear();
 
                 Console.WriteLine("Введите количество менеджеров: ");
-                isInt = Int32.TryParse(Console.ReadLine(), out managnum);
+                isInt = UInt32.TryParse(Console.ReadLine(), out managnum);
             }
 
             Console.WriteLine("Введите количество директоров: ");
-            bool isInt2 = Int32.TryParse(Console.ReadLine(), out presnum);
+            bool isInt2 = UInt32.TryParse(Console.ReadLine(), out presnum);
 
             while (!isInt2)
             {
@@ -49,77 +45,183 @@ namespace _20160205_Polymorph1
                 Console.Clear();
 
                 Console.WriteLine("Введите количество директоров: ");
-                isInt = Int32.TryParse(Console.ReadLine(), out presnum);
+                isInt = UInt32.TryParse(Console.ReadLine(), out presnum);
             }
-
-            worknum = Math.Abs(worknum);
-            managnum = Math.Abs(managnum);
-            presnum = Math.Abs(presnum);
         }
 
-        public static Worker[] EnterWorkersData(int worknum)
+        public static Worker EnterWorkerData()
         {
-            Worker[] workers = new Worker[worknum];
+            Console.Clear();
 
-            if (worknum > 0)
+            Console.WriteLine("Введите имя работника: ");
+            string name = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите фамилию работника: ");
+            string surname = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату рождения работника: ");
+            DateTime birthdate = new DateTime();
+            bool isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
+
+            while (!isDateTime)
             {
-                for (int i = 0; i < workers.Length; i++)
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("Введите имя {0} работника: ", i + 1);
-                    string name = Console.ReadLine();
-
-                    Console.Clear();
-
-                    Console.WriteLine("Введите фамилию {0} работника: ", i + 1);
-                    string surname = Console.ReadLine();
-
-                    Console.Clear();
-
-                    Console.WriteLine("Введите дату рождения {0} работника: ", i + 1);
-                    DateTime birthdate = new DateTime();
-                    bool isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
-
-                    while (!isDateTime)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Введите дату рождения {0} работника: ", i + 1);
-                        isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
-                    }
-
-                    Console.Clear();
-
-                    Console.WriteLine("Введите дату приема на работу {0} работника: ", i + 1);
-                    DateTime employmentdate = new DateTime();
-                    bool isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
-
-                    while (!isDateTime1)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Введите дату приема на работу {0} работника: ", i + 1);
-                        isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
-                    }
-
-                    Console.Clear();
-
-                    Console.WriteLine("Введите 'грязную' зарплату {0} работника: ", i + 1);
-                    double dirtysalary = 0;
-                    bool isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
-
-                    while (!isDouble)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Введите 'грязную' зарплату {0} работника: ", i + 1);
-                        isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
-                    }
-
-                    Console.Clear();
-
-                    workers[i] = new Worker(name, surname, birthdate, employmentdate, dirtysalary);
-                }
+                Console.Clear();
+                Console.WriteLine("Введите дату рождения работника: ");
+                isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
             }
-            return workers;
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату приема на работу работника: ");
+            DateTime employmentdate = new DateTime();
+            bool isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+
+            while (!isDateTime1)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите дату приема на работу работника: ");
+                isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+            }
+
+            Console.Clear();
+
+            Console.WriteLine("Введите 'грязную' зарплату работника: ");
+            double dirtysalary = 0;
+            bool isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+
+            while (!isDouble)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите 'грязную' зарплату работника: ");
+                isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+            }
+
+            Console.Clear();
+
+            Worker worker = new Worker(name, surname, birthdate, employmentdate, dirtysalary);
+            
+            return worker;
+        }
+
+
+        public static Manager EnterManagerData()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Введите имя менеджера: ");
+            string name = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите фамилию менеджера: ");
+            string surname = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату рождения менеджера: ");
+            DateTime birthdate = new DateTime();
+            bool isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
+
+            while (!isDateTime)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите дату рождения менеджера: ");
+                isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
+            }
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату приема на работу менеджера: ");
+            DateTime employmentdate = new DateTime();
+            bool isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+
+            while (!isDateTime1)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите дату приема на работу менеджера: ");
+                isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+            }
+
+            Console.Clear();
+
+            Console.WriteLine("Введите 'грязную' зарплату менеджера: ");
+            double dirtysalary = 0;
+            bool isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+
+            while (!isDouble)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите 'грязную' зарплату менеджера: ");
+                isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+            }
+
+            Console.Clear();
+
+            Manager manager = new Manager(name, surname, birthdate, employmentdate, dirtysalary);
+                
+            return manager;
+        }
+
+        public static President EnterPresidentData()
+        {
+            Console.Clear();
+
+            Console.WriteLine("Введите имя работника: ");
+            string name = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите фамилию работника: ");
+            string surname = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату рождения работника: ");
+            DateTime birthdate = new DateTime();
+            bool isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
+
+            while (!isDateTime)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите дату рождения работника: ");
+                isDateTime = DateTime.TryParse(Console.ReadLine(), out birthdate);
+            }
+
+            Console.Clear();
+
+            Console.WriteLine("Введите дату приема на работу работника: ");
+            DateTime employmentdate = new DateTime();
+            bool isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+
+            while (!isDateTime1)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите дату приема на работу работника: ");
+                isDateTime1 = DateTime.TryParse(Console.ReadLine(), out employmentdate);
+            }
+
+            Console.Clear();
+
+            Console.WriteLine("Введите 'грязную' зарплату работника: ");
+            double dirtysalary = 0;
+            bool isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+
+            while (!isDouble)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите 'грязную' зарплату работника: ");
+                isDouble = Double.TryParse(Console.ReadLine(), out dirtysalary);
+            }
+
+            Console.Clear();
+
+            President president = new President(name, surname, birthdate, employmentdate, dirtysalary);
+
+            return president;
         }
     }
 }
