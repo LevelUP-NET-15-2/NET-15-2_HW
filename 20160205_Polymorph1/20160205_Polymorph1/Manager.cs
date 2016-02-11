@@ -4,16 +4,30 @@ namespace _20160205_Polymorph1
 {
     public class Manager : Employer
     {
+        private double _prod;
+
         public Manager() {}
 
-        public Manager(string name, string surname, DateTime birthdate, DateTime employmentdate, double dirtysalary)
-            : base(name, surname, birthdate, employmentdate, dirtysalary){ }
+        public Manager(string name, string surname, DateTime birthdate, DateTime employmentdate, double dirtysalary, double prod)
+            : base(name, surname, birthdate, employmentdate, dirtysalary)
+        {
+            _prod = prod;
+        }
+
+        private double Bonus()
+        {
+            double bonus = (_prod * _dirtysalary) - _dirtysalary;
+
+            return bonus;
+        }
 
         public override double Salary
         {
             get
             {
-                return _salary = (_dirtysalary  - ((_dirtysalary * ndfl) + (_dirtysalary * vs))) + ((_exp / 1000) * _dirtysalary);
+                double bonus = Bonus();
+
+                return _salary = ((_dirtysalary + bonus) - ((_dirtysalary * ndfl) + (_dirtysalary * vs)));
             }
         }
 

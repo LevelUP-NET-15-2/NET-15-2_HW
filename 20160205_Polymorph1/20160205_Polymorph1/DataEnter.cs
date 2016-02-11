@@ -161,7 +161,18 @@ namespace _20160205_Polymorph1
 
             Console.Clear();
 
-            Manager manager = new Manager(name, surname, birthdate, employmentdate, dirtysalary);
+            Console.WriteLine("Введите продуктивность работы менеджера: ");
+            double prod = 0;
+            bool isDouble1 = Double.TryParse(Console.ReadLine(), out prod);
+
+            while (!isDouble1)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите продуктивность работы менеджера: ");
+                isDouble1 = Double.TryParse(Console.ReadLine(), out prod);
+            }
+
+            Manager manager = new Manager(name, surname, birthdate, employmentdate, dirtysalary, prod);
                 
             return manager;
         }

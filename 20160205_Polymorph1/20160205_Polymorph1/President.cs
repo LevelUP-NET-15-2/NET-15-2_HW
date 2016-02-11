@@ -13,7 +13,8 @@ namespace _20160205_Polymorph1
         {
             get
             {
-                return _salary = (_dirtysalary - ((_dirtysalary * ndfl) + (_dirtysalary * vs))) + ((_exp / 1000) * _dirtysalary);
+                return _salary = _dirtysalary;      //Президент очень хитрый, 
+                                                    //по этому зарплату получает без вычета налогов :)
             }
         }
 
