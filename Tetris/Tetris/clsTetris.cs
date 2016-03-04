@@ -9,32 +9,24 @@ namespace Tetris
 	/// </summary>
 	public class Tetris
 	{
-		/// <summary>
-		/// Game Over Event Delegate
-		/// </summary>
-		public delegate void GameOverHandler();
-		/// <summary>
-		/// Block was Fixed Event Handler
-		/// </summary>
-		public delegate void BlockFixedHandler();
-		/// <summary>
-		/// The Player was awesome enough to make some Lines 8or at least one) Handler
-		/// </summary>
-		/// <param name="Lines">Number of Lines the Player did</param>
-		public delegate void LinesDoneHandler(int Lines);
+        /// <summary>
+        /// Universal delegate for some actions
+        /// </summary>
+        /// <param name="Lines">Number of Lines the Player did</param
+        public delegate void GameHandler(int Lines = 0);
 
 		/// <summary>
 		/// Game is over Buddy!
 		/// </summary>
-		public event GameOverHandler GameOver;
+		public event GameHandler GameOver;
 		/// <summary>
 		/// Block fixed.
 		/// </summary>
-		public event BlockFixedHandler BlockFixed;
+		public event GameHandler BlockFixed;
 		/// <summary>
 		/// YOU made lines?
 		/// </summary>
-		public event LinesDoneHandler LinesDone;
+		public event GameHandler LinesDone;
 
 		/// <summary>
 		/// Available Tetris Keys
@@ -52,36 +44,36 @@ namespace Tetris
 		/// <summary>
 		/// The Playfield
 		/// </summary>
-		private int[,] Container;
+		private int[,] _container;
 		/// <summary>
 		/// X Coord of Block
 		/// </summary>
-		private int posX;
+		private int _posX;
 		/// <summary>
 		/// Y Coord of Block
 		/// </summary>
-		private int posY;
+		private int _posY;
 		/// <summary>
 		/// Current moving Block
 		/// </summary>
-		private int[,] currBlock=null;
+		private int[,] _currBlock=null;
 		/// <summary>
 		/// next Block
 		/// </summary>
-		private int[,] nextBlock = null;
+		private int[,] _nextBlock = null;
 		/// <summary>
 		/// Block generator and Manager
 		/// </summary>
-		private Block bGen=new Block();
+		private Block _bGen=new Block();
 		/// <summary>
 		/// True as long as the Game is running
 		/// (well if you play this is not so long in "true" state)
 		/// </summary>
-		private bool inGame;
+		private bool _inGame;
 		/// <summary>
 		/// Draw shadow Block [y/n]?
 		/// </summary>
-		private bool shadow;
+		private bool _shadow;
 
 		/// <summary>
 		/// initializes a new Tetris Game
@@ -90,16 +82,8 @@ namespace Tetris
 		/// <param name="Height">Height of Container (without Border) >=20</param>
 		public Tetris(int Width, int Height)
 		{
-			shadow = true;
-			if(Width >= 10 && Height >= 20)
-			{
-				Container = new int[Height, Width];
-			}
-			else
-			{
-				throw new Exception("Baker must be at least 10x20");
-			}
-
+			_shadow = true;
+			_container = new int[Height, Width];
 		}
 
 		/// <summary>
@@ -107,12 +91,12 @@ namespace Tetris
 		/// </summary>
 		public void start()
 		{
-			inGame = true;
-			posY = 0;
-			posX=Container.GetUpperBound(1)/2;
-			currBlock =nextBlock!=null?nextBlock:bGen.getRandomBlock();
-			nextBlock = bGen.getRandomBlock();
-			if(!canPosAt(currBlock, posX, posY))
+			_inGame = true;
+			_posY = 0;
+			_posX= _container.GetUpperBound(1)/2;
+			_currBlock = _nextBlock != null ? _nextBlock : _bGen.getRandomBlock();
+			_nextBlock = _bGen.getRandomBlock();
+			if(!canPosAt(_currBlock, _posX, _posY))
 			{
 				gameOver();
 			}
@@ -123,7 +107,7 @@ namespace Tetris
 		/// </summary>
 		public void gameOver()
 		{
-			inGame = false;
+			_inGame = false;
 			if(GameOver != null)
 			{
 				GameOver();
@@ -135,19 +119,21 @@ namespace Tetris
 		/// </summary>
 		public void step()
 		{
-			if(inGame)
+			if(_inGame)
 			{
-				if(canPosAt(currBlock, posX, posY + 1))
+				if(canPosAt(_currBlock, _posX, _posY + 1))
 				{
-					posY++;
+					_posY++;
 				}
 				else
 				{
-					Container=fixBlock(currBlock,Container, posX, posY);
+					_container=fixBlock(_currBlock,_container, _posX, _posY);
 
 					start();
 				}
+
 				int Lines=checkLines();
+
 				if(LinesDone != null)
 				{
 					LinesDone(Lines);
@@ -156,12 +142,12 @@ namespace Tetris
 		}
 
 		/// <summary>
-		/// handle pressed Tetris Key
+		/// Handle pressed Tetris Key
 		/// </summary>
 		/// <param name="k">Tetris Key</param>
 		public void keyPress(Key k)
 		{
-			if(inGame)
+			if(_inGame)
 			{
 				int[,] temp;
 				switch(k)
@@ -170,33 +156,33 @@ namespace Tetris
 						step();
 						break;
 					case Key.Left:
-						if(posX>0 && canPosAt(currBlock, posX - 1, posY))
+						if(_posX>0 && canPosAt(_currBlock, _posX - 1, _posY))
 						{
-							posX--;
+							_posX--;
 						}
 						break;
 					case Key.Right:
-						if(posX<Container.GetUpperBound(0)-currBlock.GetUpperBound(0) && canPosAt(currBlock, posX +1, posY))
+						if(_posX<_container.GetUpperBound(0)-_currBlock.GetUpperBound(0) && canPosAt(_currBlock, _posX +1, _posY))
 						{
-							posX++;
+							_posX++;
 						}
 						break;
 					case Key.rLeft:
-						temp = Block.rotateL(currBlock);
-						if(canPosAt(temp, posX, posY))
+						temp = Block.rotateL(_currBlock);
+						if(canPosAt(temp, _posX, _posY))
 						{
-							currBlock = Block.rotateL(currBlock);
+							_currBlock = Block.rotateL(_currBlock);
 						}
 						break;
 					case Key.rRight:
-						temp = Block.rotateR(currBlock);
-						if(canPosAt(temp, posX, posY))
+						temp = Block.rotateR(_currBlock);
+						if(canPosAt(temp, _posX, _posY))
 						{
-							currBlock = Block.rotateR(currBlock);
+							_currBlock = Block.rotateR(_currBlock);
 						}
 						break;
 					case Key.Up:
-						while(canPosAt(currBlock, posX, posY+1))
+						while(canPosAt(_currBlock, _posX, _posY+1))
 						{
 							step();
 						}
@@ -217,7 +203,7 @@ namespace Tetris
 		/// <returns>true, if positionable</returns>
 		private bool canPosAt(int[,] Block, int x, int y)
 		{
-			int[,] copy = (int[,])Container.Clone();
+			int[,] copy = (int[,])_container.Clone();
 
 			if(x+Block.GetUpperBound(1) <= copy.GetUpperBound(1) && y+Block.GetUpperBound(0) <= copy.GetUpperBound(0))
 			{
@@ -279,12 +265,12 @@ namespace Tetris
 		/// <returns></returns>
 		private int checkLines()
 		{
-			for(int i = 0;i < Container.GetUpperBound(0) + 1;i++)
+			for(int i = 0;i < _container.GetUpperBound(0) + 1;i++)
 			{
 				bool isFullLine = true;
-				for(int j = 0;j < Container.GetUpperBound(1) + 1;j++)
+				for(int j = 0;j < _container.GetUpperBound(1) + 1;j++)
 				{
-					isFullLine = isFullLine && Container[i, j] != 0;
+					isFullLine = isFullLine && _container[i, j] != 0;
 				}
 				if(isFullLine)
 				{
@@ -304,15 +290,15 @@ namespace Tetris
 			//move lines one down
 			for(int i = index;i > 0;i--)
 			{
-				for(int j = 0;j <= Container.GetUpperBound(1);j++)
+				for(int j = 0;j <= _container.GetUpperBound(1);j++)
 				{
-					Container[i, j] = Container[i-1, j];
+					_container[i, j] = _container[i-1, j];
 				}
 			}
 			//empty top line
-			for(int j = 0;j <= Container.GetUpperBound(1);j++)
+			for(int j = 0;j <= _container.GetUpperBound(1);j++)
 			{
-				Container[0, j] = 0;
+				_container[0, j] = 0;
 			}
 		}
 
@@ -323,8 +309,8 @@ namespace Tetris
 		{
 			get
 			{
-				int[,] Block = (int[,])currBlock.Clone();
-				int[,] temp = (int[,])Container.Clone();
+				int[,] Block = (int[,])_currBlock.Clone();
+				int[,] temp = (int[,])_container.Clone();
 				int add=0;
 
 
@@ -338,9 +324,9 @@ namespace Tetris
 						}
 					}
 				}
-				temp=fixBlock(Block,temp,posX,posY);
+				temp=fixBlock(Block,temp,_posX,_posY);
 
-				if(shadow)
+				if(_shadow)
 				{
 					for(int i = 0;i <= Block.GetUpperBound(0);i++)
 					{
@@ -353,14 +339,14 @@ namespace Tetris
 						}
 					}
 
-					while(canPosAt(Block, posX, posY + add))
+					while(canPosAt(Block, _posX, _posY + add))
 					{
 						add++;
 					}
 
-					if(posY + add - 1 > 0)
+					if(_posY + add - 1 > 0)
 					{
-						return (int[,])fixBlock(Block, temp, posX, posY + add - 1).Clone();
+						return (int[,])fixBlock(Block, temp, _posX, _posY + add - 1).Clone();
 					}
 				}
 				return temp;
@@ -374,7 +360,7 @@ namespace Tetris
 		{
 			get
 			{
-				return inGame;
+				return _inGame;
 			}
 		}
 
@@ -385,7 +371,7 @@ namespace Tetris
 		{
 			get
 			{
-				return nextBlock;
+				return _nextBlock;
 			}
 		}
 
@@ -397,11 +383,11 @@ namespace Tetris
 		{
 			get
 			{
-				return shadow;
+				return _shadow;
 			}
 			set
 			{
-				shadow = value;
+				_shadow = value;
 			}
 		}
 	}

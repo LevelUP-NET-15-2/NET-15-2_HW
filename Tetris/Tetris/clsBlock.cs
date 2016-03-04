@@ -12,43 +12,43 @@ namespace Tetris
 		/// <summary>
 		/// List of Tetris Blocks
 		/// </summary>
-		private List<int[,]> Blocks;
+		private List<int[,]> _blocks;
 		/// <summary>
 		/// Random Block generator
 		/// </summary>
-		private Random r;
+		private Random _r;
 
 		/// <summary>
 		/// Provides some basic Tetris Block Functions
 		/// </summary>
 		public Block()
 		{
-			r = new Random(DateTime.Now.Millisecond);
+			_r = new Random(DateTime.Now.Millisecond);
 
-			Blocks = new List<int[,]>();
+			_blocks = new List<int[,]>();
 
 			//####
-			Blocks.Add(new int[1, 4] { { 1, 1, 1, 1 } });
+			_blocks.Add(new int[1, 4] { { 1, 1, 1, 1 } });
 
 			//##
 			//##
-			Blocks.Add(new int[2, 2] { { 2, 2 }, { 2, 2 } });
+			_blocks.Add(new int[2, 2] { { 2, 2 }, { 2, 2 } });
 
 			//  #
 			//###
-			Blocks.Add(new int[2, 3] { { 0, 0, 3}, { 3, 3, 3 } });
+			_blocks.Add(new int[2, 3] { { 0, 0, 3}, { 3, 3, 3 } });
 
 			//#
 			//###
-			Blocks.Add(new int[2, 3] { { 4, 0, 0 }, { 4, 4, 4 } });
+			_blocks.Add(new int[2, 3] { { 4, 0, 0 }, { 4, 4, 4 } });
 
 			// ##
 			//##
-			Blocks.Add(new int[2, 3] { { 0, 5, 5 }, { 5, 5, 0 } });
+			_blocks.Add(new int[2, 3] { { 0, 5, 5 }, { 5, 5, 0 } });
 
 			//##
 			// ##
-			Blocks.Add(new int[2, 3] { { 6, 6, 0 }, { 0, 6, 6 } });
+			_blocks.Add(new int[2, 3] { { 6, 6, 0 }, { 0, 6, 6 } });
 		}
 
 		/// <summary>
@@ -58,9 +58,9 @@ namespace Tetris
 		/// <returns>the Bock (or null if invalid Value)</returns>
 		public int[,] getBlock(int ID)
 		{
-			if(Blocks.Count > ID && ID >= 0)
+			if(_blocks.Count > ID && ID >= 0)
 			{
-				return Blocks[ID];
+				return _blocks[ID];
 			}
 			return null;
 		}
@@ -71,7 +71,7 @@ namespace Tetris
 		/// <returns>Random Block</returns>
 		public int[,] getRandomBlock()
 		{
-			return Blocks[r.Next(Blocks.Count)];
+			return _blocks[_r.Next(_blocks.Count)];
 		}
 
 		/// <summary>

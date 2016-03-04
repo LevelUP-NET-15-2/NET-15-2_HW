@@ -8,19 +8,19 @@ namespace Tetris
 		/// <summary>
 		/// Tetris Game
 		/// </summary>
-		private static Tetris t;
+		private static Tetris _t;
 		/// <summary>
 		/// Mover Thread
 		/// </summary>
-		private static Thread mover;
+		private static Thread _mover;
 		/// <summary>
 		/// Lock of Drawing Function
 		/// </summary>
-		private static bool drawLock;
+		private static bool _drawLock;
 		/// <summary>
 		/// Counts poins/Lines
 		/// </summary>
-		private static int points;
+		private static int _points;
 
 		/// <summary>
 		/// Counter for the Worker thread
@@ -30,26 +30,30 @@ namespace Tetris
 		#region "Drawing" CONSTANTS
 			//Shadowing
 			private const string BLOCK = "█";
+
 			private const string ACTIVE = "█";
+
 			private const string BAKER = "█";
+
 			private const string EMPTY = " ";
+
 			private const string SHADOW = "▒";
 		#endregion
 
 		/// <summary>
 		/// Steps for the stepper thread
 		/// </summary>
-		private const int STEP = 10;
+		private const int _step = 10;
 
 		/// <summary>
 		/// Show next block [y/n]?
 		/// </summary>
-		private static bool showNext;
+		private static bool _showNext;
 
 		/// <summary>
 		/// Field for the "Next" Block
 		/// </summary>
-		private static readonly int[,] clearBlock = new int[,]
+		private static readonly int[,] _clearBlock = new int[,]
 		{
 			{0,0,0,0},
 			{0,0,0,0},
@@ -90,65 +94,65 @@ Press a Key to start
 			Console.Clear();
 
 			//Default Values and Game initialization
-			showNext = true;
+			_showNext = true;
 
-			points = 0;
-			drawLock = false;
-			t = new Tetris(10,20);
-			t.LinesDone += new Tetris.LinesDoneHandler(t_LinesDone);
+			_points = 0;
+			_drawLock = false;
+			_t = new Tetris(10,20);
+			_t.LinesDone += new Tetris.GameHandler(t_LinesDone);
 
 			//Start Game and run "Mover" Thread
-			t.start();
-			mover = new Thread(new ThreadStart(stepper));
-			mover.IsBackground = true;
-			mover.Start();
+			_t.start();
+			_mover = new Thread(new ThreadStart(stepper));
+			_mover.IsBackground = true;
+			_mover.Start();
 
 			//Keyboard handler
-			while(t.running)
+			while(_t.running)
 			{
 				Thread.Sleep(10);
 				if(Console.KeyAvailable)
 				{
-					lock(t)
+					lock(_t)
 					{
 						switch(Console.ReadKey(true).Key)
 						{
 							case ConsoleKey.LeftArrow:
-								t.keyPress(Tetris.Key.Left);
+								_t.keyPress(Tetris.Key.Left);
 								break;
 
 							case ConsoleKey.RightArrow:
-								t.keyPress(Tetris.Key.Right);
+								_t.keyPress(Tetris.Key.Right);
 								break;
 
 							case ConsoleKey.UpArrow:
-								t.keyPress(Tetris.Key.Up);
+								_t.keyPress(Tetris.Key.Up);
 								threadCounter = 0;
 								break;
 
 							case ConsoleKey.DownArrow:
-								t.keyPress(Tetris.Key.Down);
+								_t.keyPress(Tetris.Key.Down);
 								threadCounter = 0;
 								break;
 
 							case ConsoleKey.A:
-								t.keyPress(Tetris.Key.rLeft);
+								_t.keyPress(Tetris.Key.rLeft);
 								break;
 
 							case ConsoleKey.S:
-								t.keyPress(Tetris.Key.rRight);
+								_t.keyPress(Tetris.Key.rRight);
 								break;
 
 							case ConsoleKey.N:
-								showNext = !showNext;
+								_showNext = !_showNext;
 								break;
 
 							case ConsoleKey.G:
-								t.shadowBlock= !t.shadowBlock;
+								_t.shadowBlock= !_t.shadowBlock;
 								break;
 
 							case ConsoleKey.Escape:
-								t.gameOver();
+								_t.gameOver();
 								break;
 
 							default:
@@ -162,7 +166,7 @@ Press a Key to start
 			Thread.Sleep(1000);
 			Console.Clear();
 
-			writeCol(string.Format("You made {0} lines. Press Esc to exit",points),ConsoleColor.Red);
+			writeCol(string.Format("You made {0} lines. Press Esc to exit",_points),ConsoleColor.Red);
 
 			while(Console.ReadKey(true).Key != ConsoleKey.Escape);
 			Console.ResetColor();
@@ -177,7 +181,7 @@ Press a Key to start
 		/// <param name="Lines">Number of Lines made</param>
 		static void t_LinesDone(int Lines)
 		{
-			points += Lines;
+			_points += Lines;
 		}
 
 		/// <summary>
@@ -185,16 +189,16 @@ Press a Key to start
 		/// </summary>
 		static void stepper()
 		{
-			while(t.running)
+			while(_t.running)
 			{
 				threadCounter=0;
-				t.step();
+				_t.step();
 				drawField();
 				//Increase Speed when Lines are made
-				while(threadCounter < 1000 - (points * 5) && t.running)
+				while(threadCounter < 1000 - (_points * 5) && _t.running)
 				{
-					Thread.Sleep(STEP);
-					threadCounter += STEP;
+					Thread.Sleep(_step);
+					threadCounter += _step;
 				}
 			}
 		}
@@ -205,8 +209,8 @@ Press a Key to start
 		private static void drawField()
 		{
 			//locks the Field
-			while(drawLock);
-			drawLock = true;
+			while(_drawLock);
+			_drawLock = true;
 
 			//Current Position
 			int posX = Console.CursorLeft;
@@ -215,26 +219,26 @@ Press a Key to start
 			//Draw points
 			Console.CursorLeft = 13;
 			Console.CursorTop = 2;
-			Console.WriteLine("Lines: {0}",points);
+			Console.WriteLine("Lines: {0}",_points);
 
 			//Draw Field
 			Console.SetCursorPosition(posX, posY);
-			writeArr(t.Level, true);
+			writeArr(_t.Level, true);
 
 			//Draw next Block
 			Console.CursorLeft = 13;
 			Console.CursorTop = 3;
-			writeArr(clearBlock,true);
-			if(showNext)
+			writeArr(_clearBlock,true);
+			if(_showNext)
 			{
 				Console.CursorLeft = 14;
 				Console.CursorTop = 4;
-				writeArr(t.Next, false);
+				writeArr(_t.Next, false);
 			}
 
 			//Back to the Future, err... Beginning
 			Console.SetCursorPosition(posX, posY);
-			drawLock = false;
+			_drawLock = false;
 		}
 
 		/// <summary>
