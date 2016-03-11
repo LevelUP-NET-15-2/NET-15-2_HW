@@ -144,13 +144,13 @@ namespace _20160305_UserListDemo
                 // проходим до последнего элемента
                 while (currElem.Next != null)
                 {
-                    currElem = currElem.Next;
-                    ++i;
-
                     if (i == val)
                     {
                         return currElem.Info;
                     }
+
+                    ++i;
+                    currElem = currElem.Next;
                 }
             }
 
@@ -169,6 +169,8 @@ namespace _20160305_UserListDemo
                 return GetElemByPos(index);
             }
         }
+
+        
 
         /// <summary>
         /// Свойство, возвращающее длину списка
@@ -229,7 +231,11 @@ namespace _20160305_UserListDemo
             }
         }
 
-        public void DelElem(int elem)
+        /// <summary>
+        /// Удаление элемента списка по индексу
+        /// </summary>
+        /// <param name="elem">Индекс удаляемого элемента</param>
+        public void DelElemByIndex(int elem)
         {
             if (_first == null)
             {
@@ -239,31 +245,62 @@ namespace _20160305_UserListDemo
             {
                 MyElem currElem = _first;
 
-                //if (currElem.Next == null && elem == 0)
-                //{
-                //    currElem = null;
-                //}
-
                 int i = 0;
+                MyElem temp = _first;
 
-                // проходии до предпоследнего элемента
                 while (currElem.Next != null)
                 {
-                    MyElem temp = null;
-
-                    temp = currElem;
-
                     if (i == elem)
                     {
+                        currElem = temp;
                         currElem.Next = currElem.Next.Next;
-                        i++;
                     }
                     else
                     {
+                        temp = currElem;
                         currElem = currElem.Next;
-                        i++;
                     }
 
+                    ++i;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Удаление элемента списка по значению
+        /// </summary>
+        /// <param name="val">Удаляемое значение</param>
+        public void DelElemByValue(int val)
+        {
+            if (_first == null)
+            {
+                throw new Exception("Список пуст!");
+            }
+            else
+            {
+                MyElem currElem = _first;
+
+                MyElem temp = null;
+
+                if (_first.Info == val)
+                {
+                    _first = currElem.Next;
+                }
+
+                currElem = _first;
+
+                while (currElem.Next != null)
+                {
+                    if (currElem.Info == val)
+                    {
+                        currElem = temp;
+                        currElem.Next = currElem.Next.Next;
+                    }
+                    else
+                    {
+                        temp = currElem;
+                        currElem = currElem.Next;
+                    }
                 }
             }
         }
@@ -274,8 +311,8 @@ namespace _20160305_UserListDemo
         // 2. Реализовать индексатор на основе GetElemByPos   +
         // 3. Length - свойство, возвращающее длину списка    +
         // 4. Нахождение количества вхождений указанного элемента   +
-        // 5. Удаление элемента, находящегося на указанной позиции   +-
-        // 6. Удаление указанного элемента (по значению)   ?
+        // 5. Удаление элемента, находящегося на указанной позиции   +
+        // 6. Удаление указанного элемента (по значению)   +
 
         // 7. Добавить класс для пользовательских исключений MyListException + продумать и предусмотреть различные варианты его использования   -
 

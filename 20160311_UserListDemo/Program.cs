@@ -40,15 +40,21 @@ namespace _20160305_UserListDemo
             lst1.AddToEnd(120);
             lst1.AddToEnd(130);
 
-            Console.WriteLine(lst1.GetElemByPos(2));
-
             Console.WriteLine(lst1[1]);
 
             Console.WriteLine(lst1.Length());
 
             Console.WriteLine(lst1.GetAmountOfElems(220));
 
-            lst1.DelElem(1);
+            lst1.DelElemByIndex(1);
+
+            Console.WriteLine(lst1.Length());
+
+            Console.WriteLine(lst1.GetElemByPos(0));
+
+            lst1.AddToEnd(20);
+
+            lst1.DelElemByValue(110);
 
             Console.WriteLine(lst1.Length());
         }
