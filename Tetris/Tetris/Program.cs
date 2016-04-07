@@ -61,6 +61,9 @@ namespace Tetris
 			{0,0,0,0}
 		};
 
+        private static int _horizontal = 0;
+        private static int _vertical = 0;
+
 		/// <summary>
 		/// Main Application loop
 		/// </summary>
@@ -68,6 +71,80 @@ namespace Tetris
 		/// <returns>0</returns>
 		static int Main(string[] args)
 		{
+            bool horisontalIsNormal = false;
+            bool verticalIsNormal = false;
+
+            while (horisontalIsNormal == false)
+            {
+                bool isInt = false;
+
+                while (!isInt)
+                {
+                    Console.Clear();
+
+                    Console.WriteLine("Введите размеры игрового поля: ");
+                    Console.WriteLine("По горизонтали (не меньше 10): ");
+
+                    try
+                    {
+                        _horizontal = Int32.Parse(Console.ReadLine());
+
+                        isInt = true;
+                    }
+
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Вы ввели что-то не то! Нажмите любую кнопку, чтобы повторить ввод.");
+                        Console.ReadKey();
+                    }
+                }
+
+                if (_horizontal >= 10)
+                {
+                    horisontalIsNormal = true;
+                }
+                else
+                {
+                    Console.WriteLine("Размер поля по горизонтали < 10! Нажмите любую кнопку, чтобы повторить ввод.");
+                    Console.ReadKey();
+                }
+            }
+
+            while (verticalIsNormal == false)
+            {
+                bool isInt = false;
+
+                while (!isInt)
+                {
+                    Console.Clear();
+
+                    Console.WriteLine("Введите размеры игрового поля: ");
+                    Console.WriteLine("По вертикали (не меньше 20): ");
+
+                    try
+                    {
+                        _vertical = Int32.Parse(Console.ReadLine());
+
+                        isInt = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Вы ввели что-то не то! Нажмите любую кнопку, чтобы повторить ввод.");
+                        Console.ReadKey();
+                    }
+                }
+
+                if (_vertical >= 20)
+                {
+                    verticalIsNormal = true;
+                }
+                else
+                {
+                    Console.WriteLine("Размер поля по вертикали < 20! Нажмите любую кнопку, чтобы повторить ввод.");
+                    Console.ReadKey();
+                }
+            }
+
 			//preparing Console
 			Console.Clear();
 			Console.Beep(600, 500);
@@ -98,10 +175,11 @@ Press a Key to start
 
 			_points = 0;
 			_drawLock = false;
-			_t = new Tetris(10,20);
+			_t = new Tetris(_horizontal, _vertical);
 			_t.LinesDone += new Tetris.GameHandler(t_LinesDone);
 
 			//Start Game and run "Mover" Thread
+            Console.SetWindowSize(_horizontal + 12, _vertical + 2);
 			_t.start();
 			_mover = new Thread(new ThreadStart(stepper));
 			_mover.IsBackground = true;
@@ -168,7 +246,7 @@ Press a Key to start
 
 			writeCol(string.Format("You made {0} lines. Press Esc to exit",_points),ConsoleColor.Red);
 
-			while(Console.ReadKey(true).Key != ConsoleKey.Escape);
+			while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 			Console.ResetColor();
 			Console.CursorVisible = true;
 
@@ -189,13 +267,13 @@ Press a Key to start
 		/// </summary>
 		static void stepper()
 		{
-			while(_t.running)
+			while (_t.running)
 			{
 				threadCounter=0;
 				_t.step();
 				drawField();
 				//Increase Speed when Lines are made
-				while(threadCounter < 1000 - (_points * 5) && _t.running)
+				while (threadCounter < 1000 - (_points * 5) && _t.running)
 				{
 					Thread.Sleep(_step);
 					threadCounter += _step;
@@ -209,7 +287,7 @@ Press a Key to start
 		private static void drawField()
 		{
 			//locks the Field
-			while(_drawLock);
+			while (_drawLock);
 			_drawLock = true;
 
 			//Current Position
@@ -217,7 +295,7 @@ Press a Key to start
 			int posY = Console.CursorTop;
 
 			//Draw points
-			Console.CursorLeft = 13;
+			Console.CursorLeft = _horizontal + 3;
 			Console.CursorTop = 2;
 			Console.WriteLine("Lines: {0}",_points);
 
@@ -226,13 +304,13 @@ Press a Key to start
 			writeArr(_t.Level, true);
 
 			//Draw next Block
-			Console.CursorLeft = 13;
+			Console.CursorLeft = _horizontal + 3;
 			Console.CursorTop = 3;
-			writeArr(_clearBlock,true);
-			if(_showNext)
+			writeArr(_clearBlock, true);
+			if (_showNext)
 			{
-				Console.CursorLeft = 14;
-				Console.CursorTop = 4;
+				Console.CursorLeft = _horizontal + 4;
+				Console.CursorTop = 5;
 				writeArr(_t.Next, false);
 			}
 
@@ -249,16 +327,16 @@ Press a Key to start
 		static void writeArr(int[,] qq,bool writeBorder)
 		{
 			int x = Console.CursorLeft;
-			for(int i = 0;i <= qq.GetUpperBound(0);i++)
+			for (int i = 0;i <= qq.GetUpperBound(0);i++)
 			{
-				if(writeBorder)
+				if (writeBorder)
 				{
 					Console.Write(BAKER);
 				}
-				for(int j = 0;j <= qq.GetUpperBound(1);j++)
+				for (int j = 0;j <= qq.GetUpperBound(1);j++)
 				{
 					//Change color according to the Number
-					switch(qq[i, j])
+					switch (qq[i, j])
 					{
 						case 1:
 							writeCol(BLOCK, ConsoleColor.White);
@@ -301,7 +379,7 @@ Press a Key to start
 							break;
 					}
 				}
-				if(writeBorder)
+				if (writeBorder)
 				{
 					Console.WriteLine(BAKER);
 				}
@@ -312,9 +390,9 @@ Press a Key to start
 				}
 				Console.CursorLeft = x;
 			}
-			for(int q = 0;q <= qq.GetUpperBound(1)+2;q++)
+			for (int q = 0;q <= qq.GetUpperBound(1)+2;q++)
 			{
-				if(writeBorder)
+				if (writeBorder)
 				{
 					Console.Write(BAKER);
 				}
